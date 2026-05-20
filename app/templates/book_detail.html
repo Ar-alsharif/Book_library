@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% block title %}{{ book.title }} — Bibliotheca{% endblock %}
+{% block content %}
+<div class="detail-page">
+  <a href="{{ url_for('books.browse') }}" class="back-link">← Back to Browse</a>
+  <div class="detail-layout">
+    <div class="detail-cover">
+      {% if book.cover_url %}
+        <img src="{{ book.cover_url }}" alt="{{ book.title }}">
+      {% else %}
+        <div class="detail-cover-placeholder">
+          <span>{{ book.title[0] }}</span>
+        </div>
+      {% endif %}
+    </div>
+    <div class="detail-info">
+      <span class="category-tag lg">{{ book.category.name }}</span>
+      <h1>{{ book.title }}</h1>
+      <p class="detail-author">by {{ book.author }}</p>
+      <p class="detail-isbn">ISBN: {{ book.isbn }}</p>
+      {% if book.description %}
+        <p class="detail-desc">{{ book.description }}</p>
+      {% endif %}
+      <div class="detail-availability">
+        <span class="copies-badge {% if book.available_copies > 0 %}available{% else %}unavailable{% endif %}">
+          {% if book.available_copies > 0 %}
+            {{ book.available_copies }} of {{ book.copies }} copies available
+          {% else %}
+            All copies borrowed
+          {% endif %}
+        </span>
+      </div>
+      {% if current_user.is_authenticated and not current_user.is_admin %}
+        {% if user_borrowed %}
+          <p class="already-borrowed">You currently have this book borrowed.</p>
+          <form method="POST" action="">
+            <!-- Return from My Books page -->
+          </form>
+        {% elif book.available_copies > 0 %}
+          <form method="POST" action="{{ url_for('books.borrow', book_id=book.id) }}">
+            <button type="submit" class="btn-primary lg">Borrow This Book</button>
+          </form>
+        {% else %}
+          <button class="btn-disabled lg" disabled>Not Available</button>
+        {% endif %}
+      {% elif not current_user.is_authenticated %}
+        <a href="{{ url_for('auth.login') }}" class="btn-primary lg">Login to Borrow</a>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

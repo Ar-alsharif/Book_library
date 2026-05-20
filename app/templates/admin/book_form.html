@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% block title %}{{ 'Edit' if book else 'Add' }} Book — Admin{% endblock %}
+{% block content %}
+<div class="admin-layout">
+  <aside class="admin-sidebar">
+    <div class="sidebar-title">Admin Panel</div>
+    <nav class="sidebar-nav">
+      <a href="{{ url_for('admin.dashboard') }}" class="sidebar-link">📊 Dashboard</a>
+      <a href="{{ url_for('admin.manage_books') }}" class="sidebar-link">📚 Manage Books</a>
+      <a href="{{ url_for('admin.manage_categories') }}" class="sidebar-link">🏷️ Categories</a>
+      <a href="{{ url_for('admin.add_book') }}" class="sidebar-link {% if not book %}active{% endif %}">➕ Add Book</a>
+      <a href="{{ url_for('admin.manage_users') }}" class="sidebar-link">👥 Users</a>
+      <hr class="sidebar-divider">
+      <a href="{{ url_for('books.browse') }}" class="sidebar-link">🌐 View Site</a>
+    </nav>
+  </aside>
+  <div class="admin-main">
+    <div class="admin-header">
+      <h1>{{ 'Edit Book' if book else 'Add New Book' }}</h1>
+      <a href="{{ url_for('admin.manage_books') }}" class="btn-ghost">← Back</a>
+    </div>
+    <div class="form-card">
+      <form method="POST">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Title *</label>
+            <input type="text" name="title" value="{{ book.title if book else '' }}" required>
+          </div>
+          <div class="form-group">
+            <label>Author *</label>
+            <input type="text" name="author" value="{{ book.author if book else '' }}" required>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>ISBN *</label>
+            <input type="text" name="isbn" value="{{ book.isbn if book else '' }}" required>
+          </div>
+          <div class="form-group">
+            <label>Copies</label>
+            <input type="number" name="copies" value="{{ book.copies if book else 1 }}" min="1">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Category *</label>
+            <select name="category_id" required>
+              {% for cat in categories %}
+                <option value="{{ cat.id }}" {% if book and book.category_id == cat.id %}selected{% endif %}>
+                  {{ cat.name }}
+                </option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Cover Image URL</label>
+            <input type="url" name="cover_url" value="{{ book.cover_url if book and book.cover_url else '' }}"
+                   placeholder="https://...">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+          <textarea name="description" rows="4">{{ book.description if book else '' }}</textarea>
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="btn-primary">
+            {{ 'Update Book' if book else 'Add Book' }}
+          </button>
+          <a href="{{ url_for('admin.manage_books') }}" class="btn-ghost">Cancel</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

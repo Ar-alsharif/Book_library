@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% block title %}My Books — Bibliotheca{% endblock %}
+{% block content %}
+<div class="page-hero">
+  <h1>My Books</h1>
+  <p>Manage your borrowed books</p>
+</div>
+
+<div class="mybooks-container">
+  <section>
+    <h2 class="section-title">Currently Borrowed <span class="badge">{{ active|length }}</span></h2>
+    {% if active %}
+      <div class="borrowing-list">
+        {% for b in active %}
+          <div class="borrowing-card">
+            <div class="borrowing-info">
+              <h3>{{ b.book.title }}</h3>
+              <p>by {{ b.book.author }}</p>
+              <p class="borrow-date">Borrowed: {{ b.borrowed_at.strftime('%b %d, %Y') }}</p>
+              {% if b.due_date %}
+                <p class="due-date {% if b.due_date < now %}overdue{% endif %}">
+                  Due: {{ b.due_date.strftime('%b %d, %Y') }}
+                </p>
+              {% endif %}
+            </div>
+            <form method="POST" action="{{ url_for('books.return_book', borrowing_id=b.id) }}">
+              <button type="submit" class="btn-return">Return Book</button>
+            </form>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="empty-state small">
+        <p>You have no books currently borrowed.</p>
+        <a href="{{ url_for('books.browse') }}" class="btn-primary">Browse Books</a>
+      </div>
+    {% endif %}
+  </section>
+
+  {% if history %}
+  <section>
+    <h2 class="section-title">Return History</h2>
+    <div class="history-list">
+      {% for b in history %}
+        <div class="history-item">
+          <span class="history-title">{{ b.book.title }}</span>
+          <span class="history-date">Returned {{ b.returned_at.strftime('%b %d, %Y') }}</span>
+        </div>
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %}
+</div>
+{% endblock %}

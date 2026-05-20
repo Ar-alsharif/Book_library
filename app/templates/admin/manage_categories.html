@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% block title %}Categories — Admin{% endblock %}
+{% block content %}
+<div class="admin-layout">
+  <aside class="admin-sidebar">
+    <div class="sidebar-title">Admin Panel</div>
+    <nav class="sidebar-nav">
+      <a href="{{ url_for('admin.dashboard') }}" class="sidebar-link">📊 Dashboard</a>
+      <a href="{{ url_for('admin.manage_books') }}" class="sidebar-link">📚 Manage Books</a>
+      <a href="{{ url_for('admin.manage_categories') }}" class="sidebar-link">🏷️ Categories</a>
+      <a href="{{ url_for('admin.add_book') }}" class="sidebar-link">➕ Add Book</a>
+      <a href="{{ url_for('admin.manage_categories') }}" class="sidebar-link active">🏷️ Categories</a>
+      <a href="{{ url_for('admin.manage_users') }}" class="sidebar-link">👥 Users</a>
+      <hr class="sidebar-divider">
+      <a href="{{ url_for('books.browse') }}" class="sidebar-link">🌐 View Site</a>
+    </nav>
+  </aside>
+  <div class="admin-main">
+    <div class="admin-header">
+      <h1>Categories</h1>
+      <a href="{{ url_for('admin.add_category') }}" class="btn-primary">+ Add Category</a>
+    </div>
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Description</th>
+          <th>Books</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for cat in categories %}
+        <tr>
+          <td><strong>{{ cat.name }}</strong></td>
+          <td>{{ cat.description or '—' }}</td>
+          <td>{{ cat.books|length }}</td>
+          <td class="actions">
+            <a href="{{ url_for('admin.edit_category', cat_id=cat.id) }}" class="btn-edit">Edit</a>
+            <form method="POST" action="{{ url_for('admin.delete_category', cat_id=cat.id) }}"
+                  onsubmit="return confirm('Delete {{ cat.name }}?');" style="display:inline;">
+              <button type="submit" class="btn-delete">Delete</button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

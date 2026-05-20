@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% block title %}Admin Dashboard — Bibliotheca{% endblock %}
+{% block content %}
+<div class="admin-layout">
+  <aside class="admin-sidebar">
+    <div class="sidebar-title">Admin Panel</div>
+    <nav class="sidebar-nav">
+      <a href="{{ url_for('admin.dashboard') }}" class="sidebar-link active">📊 Dashboard</a>
+      <a href="{{ url_for('admin.manage_books') }}" class="sidebar-link">📚 Manage Books</a>
+      <a href="{{ url_for('admin.manage_categories') }}" class="sidebar-link">🏷️ Categories</a>
+      <a href="{{ url_for('admin.add_book') }}" class="sidebar-link">➕ Add Book</a>
+      <a href="{{ url_for('admin.manage_users') }}" class="sidebar-link">👥 Users</a>
+      <hr class="sidebar-divider">
+      <a href="{{ url_for('books.browse') }}" class="sidebar-link">🌐 View Site</a>
+    </nav>
+  </aside>
+  <div class="admin-main">
+    <div class="admin-header">
+      <h1>Dashboard</h1>
+      <p>Welcome back, {{ current_user.username }}</p>
+    </div>
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon">📚</div>
+        <div class="stat-value">{{ total_books }}</div>
+        <div class="stat-label">Total Books</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">👥</div>
+        <div class="stat-value">{{ total_users }}</div>
+        <div class="stat-label">Registered Users</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">📖</div>
+        <div class="stat-value">{{ active_borrowings }}</div>
+        <div class="stat-label">Active Borrowings</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">📋</div>
+        <div class="stat-value">{{ total_borrowings }}</div>
+        <div class="stat-label">Total Borrowings</div>
+      </div>
+    </div>
+
+    <div class="admin-section">
+      <h2>Recent Borrowings</h2>
+      {% if recent_borrowings %}
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>User</th>
+              <th>Book</th>
+              <th>Borrowed On</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for b in recent_borrowings %}
+              <tr>
+                <td>{{ b.user.username }}</td>
+                <td>{{ b.book.title }}</td>
+                <td>{{ b.borrowed_at.strftime('%b %d, %Y') }}</td>
+                <td>
+                  <span class="status-badge {% if b.returned %}returned{% else %}active{% endif %}">
+                    {{ 'Returned' if b.returned else 'Active' }}
+                  </span>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      {% else %}
+        <p class="no-data">No borrowings yet.</p>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}
