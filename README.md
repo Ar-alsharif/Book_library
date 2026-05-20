@@ -15,7 +15,7 @@ A full-featured book library management system built with Flask, SQLAlchemy, and
 
 ---
 
-## 🗄️ Database Schema (4 Tables)
+## Database Schema (4 Tables)
 
 | Table | Description |
 |-------|-------------|
@@ -26,7 +26,7 @@ A full-featured book library management system built with Flask, SQLAlchemy, and
 
 ---
 
-## 🌐 API Endpoints (9 Total)
+## API Endpoints (9 Total)
 
 | Method | Route | Description | Access |
 |--------|-------|-------------|--------|
@@ -47,7 +47,7 @@ A full-featured book library management system built with Flask, SQLAlchemy, and
 
 ---
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Local Setup
 
@@ -76,7 +76,7 @@ Visit `http://localhost:5000`
 
 ---
 
-## 🐳 Docker Setup
+## Docker Setup
 
 ```bash
 # Build and run with Docker Compose
@@ -89,7 +89,7 @@ docker run -p 5000:5000 bibliotheca
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 book-library/
@@ -122,7 +122,7 @@ book-library/
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 - **Backend:** Python 3.11, Flask 3.0
 - **Database:** SQLite via Flask-SQLAlchemy
@@ -132,6 +132,6 @@ book-library/
 
 ---
 
-## 📄 License
+## License
 
 MIT License — free to use and modify.
